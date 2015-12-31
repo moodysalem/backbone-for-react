@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/moodysalem/react-backbone.git"
+    "url": "git+https://github.com/moodysalem/backbone-for-react.git"
   },
   "keywords": [
     "react",
@@ -17,9 +17,9 @@
   "author": "Moody Salem <moody.salem@gmail.com>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/moodysalem/react-backbone/issues"
+    "url": "https://github.com/moodysalem/backbone-for-react/issues"
   },
-  "homepage": "https://github.com/moodysalem/react-backbone#readme",
+  "homepage": "https://github.com/moodysalem/backbone-for-react#readme",
   "dependencies": {
     "backbone": "^1.2.3",
     "jquery": "^2.1.4",
