@@ -4,7 +4,8 @@
   "description": "An extension of Backbone that is better suited for use in React",
   "main": "index.js",
   "scripts": {
-    "test": "mocha test.js"
+    "test": "mocha test.js",
+    "patch": "npm-release patch"
   },
   "repository": {
     "type": "git",
@@ -29,6 +30,7 @@
     "underscore": "^1.8.3"
   },
   "devDependencies": {
-    "mocha": "^2.3.4"
+    "mocha": "^2.3.4",
+    "npm-release": "^1.0.0"
   }
 }
