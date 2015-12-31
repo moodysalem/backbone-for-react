@@ -1,6 +1,6 @@
 {
   "name": "backbone-for-react",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "An extension of Backbone that is better suited for use in React",
   "main": "index.js",
   "scripts": {
