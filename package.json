@@ -1,0 +1,30 @@
+{
+  "name": "react-backbone",
+  "version": "0.1.0",
+  "description": "An extension of Backbone that is better suited for use in React",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/moodysalem/react-backbone.git"
+  },
+  "keywords": [
+    "react",
+    "backbone"
+  ],
+  "author": "Moody Salem <moody.salem@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/moodysalem/react-backbone/issues"
+  },
+  "homepage": "https://github.com/moodysalem/react-backbone#readme",
+  "dependencies": {
+    "backbone": "^1.2.3",
+    "jsog": "^1.0.7",
+    "moment": "^2.10.6",
+    "promise-polyfill": "^2.1.0",
+    "underscore": "^1.8.3"
+  }
+}
