@@ -5,7 +5,6 @@ var JSOG = require('jsog');
 var _ = require('underscore');
 var moment = require('moment');
 var Promise = require('promise-polyfill');
-var $ = require('jquery');
 
 var ReactBackbone = _.clone(OriginalBackbone);
 
@@ -383,7 +382,8 @@ ReactBackbone.Collection = (function (oldCollection) {
       }
       var params = _.extend(this.getPaginationParams(), this.getSortParams(), _.result(this, "params"), dataOptions);
 
-      options.data = paramify(params, true);
+      // ajax supports an object for data
+      options.data = params;
       return oldCollection.prototype.fetch.call(this, options);
     },
 

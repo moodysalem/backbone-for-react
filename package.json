@@ -23,7 +23,6 @@
   "homepage": "https://github.com/moodysalem/backbone-for-react#readme",
   "dependencies": {
     "backbone": "^1.2.3",
-    "jquery": "^2.1.4",
     "jsog": "^1.0.7",
     "moment": "^2.10.6",
     "promise-polyfill": "^2.1.0",
