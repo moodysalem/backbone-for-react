@@ -3,7 +3,7 @@ var _ = require("underscore");
 var assert = require('assert');
 
 describe('Model', function () {
-  describe('#get()', function () {
+  describe('#get() and #set()', function () {
     var model = new Backbone.Model();
     it('should return undefined on getting an empty attribute', function () {
       assert(typeof model.get("someundefinedattribute") === "undefined", 'undefined attribute');
@@ -42,5 +42,64 @@ describe('Model', function () {
       assert(_.isEqual(model.get("get.this.attribute"), [ 'me' ]));
     });
 
+  });
+});
+
+describe("#parse()", function () {
+  it('should use JSOG to parse models and collections', function () {
+    // a model with two attributes that are of the same type
+    var m = new Backbone.Model({
+      one: {
+        "@id": "1",
+        name: "hello"
+      },
+      two: {
+        "@ref": "1"
+      }
+    }, { parse: true });
+
+    assert(m.get("two.name") === "hello");
+
+    // a circular collection
+    var santas = new Backbone.Collection([
+      {
+        "@id": "1",
+        "id": 1,
+        "name": "Sally",
+        "secretSanta": {
+          "@id": "2",
+          "id": 2,
+          "name": "Bob",
+          "secretSanta": {
+            "@id": "3",
+            "id": 3,
+            "name": "Fred",
+            "secretSanta": { "@ref": "1" }
+          }
+        }
+      },
+      { "@ref": "2" },
+      { "@ref": "3" }
+    ], { parse: true });
+
+    assert(santas.get(2).get("secretSanta.secretSanta.name") === "Sally");
+  });
+});
+
+
+describe('#save() invalid model', function () {
+  it('should return a promise', function () {
+    var m = new (Backbone.Model.extend({
+      validate: function (attributes, option) {
+        if (attributes.name === "Sally") {
+          return "Sally is a reserved name.";
+        }
+      }
+    }))({
+      name: 'Sally'
+    });
+
+    var p = m.save();
+    assert(typeof p.then === "function");
   });
 });

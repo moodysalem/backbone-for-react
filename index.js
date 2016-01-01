@@ -1,7 +1,7 @@
 'use strict';
 
 var OriginalBackbone = require('backbone');
-var JSOG = require('jsog');
+var jsogDecode = require('./jsog-decode');
 var _ = require('underscore');
 var moment = require('moment');
 var Promise = require('promise-polyfill');
@@ -18,7 +18,7 @@ var ReactBackbone = _.clone(OriginalBackbone);
  *  NOTE: setting a nested attribute triggers a change on the nested attribute, e.g. change:token.user.name
  *  BUT will not trigger a change event on token, or token.user even if token and user objects had to be created
  *
- * 3. Parsing of results from the server is processed via JSOG.
+ * 3. Parsing of objects uses JSOG
  *
  * 4. When saving a model that does not pass validation, a promise is returned
  */
@@ -133,7 +133,7 @@ ReactBackbone.Model = (function (oldModel) {
 
     // decode all responses using JSOG
     parse: function (response, options) {
-      return _.isObject(response) ? JSOG.decode(response) : response;
+      return _.isObject(response) ? jsogDecode(response) : response;
     },
 
     // failed validation methods should return a promise
@@ -365,7 +365,7 @@ ReactBackbone.Collection = (function (oldCollection) {
         });
       }
       // use the JSOG library to decode whatever the response is
-      return _.isObject(response) ? JSOG.decode(response) : response;
+      return _.isObject(response) ? jsogDecode(response) : response;
     },
 
     /**
@@ -376,14 +376,15 @@ ReactBackbone.Collection = (function (oldCollection) {
     fetch: function (options) {
       options = options || {};
 
-      var dataOptions = {};
-      if (options.data) {
-        dataOptions = _.parseQueryString(options.data);
-      }
-      var params = _.extend(this.getPaginationParams(), this.getSortParams(), _.result(this, "params"), dataOptions);
+      var dataParams = typeof options.data === "object" ? options.data : null;
 
       // ajax supports an object for data
-      options.data = params;
+      options.data = _.extend(
+        this.getPaginationParams(),
+        this.getSortParams(),
+        this.params,
+        dataParams
+      );
       return oldCollection.prototype.fetch.call(this, options);
     },
 
