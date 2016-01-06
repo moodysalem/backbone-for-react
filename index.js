@@ -385,6 +385,12 @@ ReactBackbone.Collection = (function (oldCollection) {
         this.params,
         dataParams
       );
+
+      // use traditional object serialization for query parameters by default
+      if (typeof options.traditional === 'undefined') {
+        options.traditional = true;
+      }
+
       return oldCollection.prototype.fetch.call(this, options);
     },
 
