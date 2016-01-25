@@ -401,7 +401,6 @@ ReactBackbone.Collection = (function (oldCollection) {
 
       var oc = options.complete;
       options.complete = _.bind(function () {
-        console.log('completed, unsetting active fetch');
         this._activeFetch = null;
         if (typeof oc === 'function') {
           oc.apply(this, arguments);
