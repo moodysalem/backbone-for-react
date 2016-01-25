@@ -189,6 +189,9 @@ ReactBackbone.Collection = (function (oldCollection) {
     // whether the full set of records exists on the client
     server: false,
 
+    // a reference to the active fetch call
+    _activeFetch: null,
+
     /**
      * 'params' can be specified as an option containing an object with a list of collection parameters
      * @param options
@@ -374,6 +377,11 @@ ReactBackbone.Collection = (function (oldCollection) {
      * @returns {*}
      */
     fetch: function (options) {
+      if (this._activeFetch !== null) {
+        this._activeFetch.abort();
+        this._activeFetch = null;
+      }
+
       options = options || {};
 
       var dataParams = typeof options.data === "object" ? options.data : null;
@@ -391,7 +399,16 @@ ReactBackbone.Collection = (function (oldCollection) {
         options.traditional = true;
       }
 
-      return oldCollection.prototype.fetch.call(this, options);
+      var oc = options.complete;
+      options.complete = _.bind(function () {
+        console.log('completed, unsetting active fetch');
+        this._activeFetch = null;
+        if (typeof oc === 'function') {
+          oc.apply(this, arguments);
+        }
+      }, this);
+
+      return (this._activeFetch = oldCollection.prototype.fetch.call(this, options));
     },
 
     /**
