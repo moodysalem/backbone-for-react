@@ -185,6 +185,9 @@ ReactBackbone.Collection = (function (oldCollection) {
     // the additional query parameters to use for fetching
     params: {},
 
+    // the headers that should be added onto the request
+    headers: {},
+
     // internal variable storing whether the server is used for sorting and pagination - determined by
     // whether the full set of records exists on the client
     server: false,
@@ -246,6 +249,43 @@ ReactBackbone.Collection = (function (oldCollection) {
         var setObj = {};
         setObj[ key ] = value;
         this.params = _.extend({}, this.params, setObj);
+      }
+      return this;
+    },
+
+    /**
+     * Reset the headers
+     */
+    resetHeaders: function () {
+      this.headers = {};
+      return this;
+    },
+
+    /**
+     * Remove a parameter from the headers object, can be chained
+     * @param key key of the header
+     * @returns {ReactBackbone.Collection}
+     */
+    unsetHeader: function (key) {
+      if (typeof key === "string") {
+        this.headers = _.omit(this.headers, key);
+        return this;
+      }
+    },
+
+    /**
+     * Sets a header or headers into the collection
+     * @param key object with new headers or name of the header to be set
+     * @param value if key is a string for the header name, this is the value of header
+     * @returns {ReactBackbone.Collection}
+     */
+    setHeader: function (key, value) {
+      if (typeof key === "object") {
+        this.headers = _.extend({}, this.headers, key);
+      } else if (typeof key === "string") {
+        var setObj = {};
+        setObj[ key ] = value;
+        this.headers = _.extend({}, this.headers, setObj);
       }
       return this;
     },
@@ -406,6 +446,8 @@ ReactBackbone.Collection = (function (oldCollection) {
           oc.apply(this, arguments);
         }
       }, this);
+
+      options.headers = _.extend({}, this.headers, options.headers);
 
       return (this._activeFetch = oldCollection.prototype.fetch.call(this, options));
     },
