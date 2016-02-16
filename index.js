@@ -86,22 +86,24 @@ ReactBackbone.Model = (function (oldModel) {
         var topLevelValue = _.clone(this.get(firstPc));
 
         if (pcs.length > 0) {
+          // nested set
           var toSet = topLevelValue;
           if (typeof toSet !== "object") {
             toSet = {};
           }
+
           var ptr = toSet;
-          var lastPtr = ptr;
-          var lastSetPc = firstPc;
+
           while (pcs.length > 1) {
             var nextPc = pcs.shift();
-            if (typeof toSet[ nextPc ] !== "object") {
-              toSet[ nextPc ] = {};
+            if (typeof ptr[ nextPc ] !== "object") {
+              ptr[ nextPc ] = {};
+            } else {
+              ptr[ nextPc ] = _.clone(ptr[ nextPc ]);
             }
-            lastPtr = ptr;
-            lastSetPc = nextPc;
-            ptr = toSet[ nextPc ];
+            ptr = ptr[ nextPc ];
           }
+
           var lastPc = pcs.shift();
 
           var oldVal = this.get(attribute);
