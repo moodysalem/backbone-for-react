@@ -42,6 +42,30 @@ describe('Model', function () {
       assert(_.isEqual(model.get("get.this.attribute"), [ 'me' ]));
     });
 
+
+    it('should not reuse objects when setting nested fields', function () {
+      model.set('abc.my.fake.attribute', 'a');
+      var obj = model.get('abc.my.fake');
+      assert(obj.attribute === 'a');
+
+      model.set('abc.my.fake.attribute', 'b');
+      assert(obj.attribute === 'a');
+      assert(model.get('abc.my.fake.attribute') === 'b');
+    });
+
+    it('should emit events for setting nested fields', function (done) {
+      var eventName = 'change:my.nested.field';
+
+      var lfn = function(){
+        Backbone.stopListening(model, eventName, lfn);
+        done();
+      };
+
+      Backbone.listenTo(model, eventName, lfn);
+
+      model.set('my.nested.field', 'changed');
+    });
+
   });
 });
 
